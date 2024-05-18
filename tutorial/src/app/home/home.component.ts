@@ -4,8 +4,10 @@ import { CommonModule, getLocaleExtraDayPeriodRules } from '@angular/common';
 import { Products, Product } from '../types';
 import { ProductComponent } from '../components/product/product.component';
 import { PaginatorModule } from 'primeng/paginator';
+import { Paginator } from 'primeng/paginator';
 import { EditPopupComponent } from '../components/edit-popup/edit-popup.component';
 import { ButtonModule } from 'primeng/button';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +17,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+
+  @ViewChild('paginator') paginator : Paginator | undefined;
+
   constructor(private productsService: ProductService) {}
 
   products: Product[] = [];
@@ -75,6 +80,10 @@ export class HomeComponent {
     this.fetchProducts(event.page, event.rows);
   }
 
+  resetPaginator() {
+    this.paginator?.changePage(0);
+  }
+
   fetchProducts(page: number, perPage: number) {
     this.productsService
       .getProducts('http://localhost:3000/clothes', { page, perPage })
@@ -90,6 +99,7 @@ export class HomeComponent {
         next: (data) => {
           console.log(data);
           this.fetchProducts(0, this.rows);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
@@ -104,6 +114,7 @@ export class HomeComponent {
         next: (data) => {
           console.log(data);
           this.fetchProducts(0, this.rows);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
@@ -118,6 +129,7 @@ export class HomeComponent {
         next: (data) => {
           console.log(data);
           this.fetchProducts(0, this.rows);
+          this.resetPaginator();
         },
         error: (error) => {
           console.log(error);
